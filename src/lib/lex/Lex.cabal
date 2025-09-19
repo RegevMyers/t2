@@ -1,5 +1,5 @@
 cabal-version:  3.4
-name:           lex
+name:           Lex
 version:        0.0.0
 build-type:     Simple
 
@@ -7,5 +7,6 @@ library
     ghc-options:        -Wall
     hs-source-dirs:     .
     exposed-modules:    Lex
-    build-depends:      base ^>= 4.20
+    build-depends:      base ^>= 4.20,
+                        text ^>= 2.1
     default-language:   Haskell2010
