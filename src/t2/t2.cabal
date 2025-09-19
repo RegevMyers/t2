@@ -1,0 +1,11 @@
+cabal-version: 3.4
+name: t2
+version: 0.0.0
+build-type: Simple
+
+executable t2
+    ghc-options:      -Wall
+    hs-source-dirs:   .
+    main-is:          Main.hs
+    build-depends:    base ^>=4.17.2.1
+    default-language: Haskell2010
