@@ -1,3 +1,4 @@
 packages:
-    src/lib/lex
+    src/lib/t2/lex
+    src/lib/common
     src/t2
