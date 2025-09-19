@@ -15,4 +15,4 @@ type Lexeme = Text
 
 type Token = (TokenType, Lexeme)
 
-type Lexer = Text -> (Maybe Token, Text)
+type Lexer = Text -> Maybe (Token, Text)

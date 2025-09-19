@@ -4,12 +4,13 @@ version:            0.1.0.0
 build-type:         Simple
 
 library
-    ghc-options:      -Wall
-    hs-source-dirs:   .
-    exposed-modules:  Utils.Char         ,
-                      Utils.Function     ,
-                      Utils.List         ,
-                      Utils.Maybe
-    build-depends:    base ^>= 4.20,
-                      safe ^>= 0.3
-    default-language: Haskell2010
+    ghc-options:        -Wall
+    hs-source-dirs:     .
+    exposed-modules:    Utils.Char,
+                        Utils.Either,
+                        Utils.Function,
+                        Utils.List,
+                        Utils.Maybe
+    build-depends:      base ^>= 4.20,
+                        safe ^>= 0.3
+    default-language:   Haskell2010

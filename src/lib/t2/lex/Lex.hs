@@ -7,22 +7,38 @@ module Lex (
 
 import Internal.Lexer
 
-import Data.Text (Text, all, splitOn)
+import qualified Data.Text as Text
+import Data.Text (Text)
+import Data.Char (isDigit)
+import Control.Applicative ((<|>))
 
-import Prelude hiding (lex, all)
+import Prelude hiding (lex)
 
-lex :: Text -> Maybe [Token]
-lex text =
-    mapM lexWord $ splitOn " " text
+lex :: Text -> Either Text [Token]
+lex text = sequenceA $ lexWords text
 
-lexWord :: Text -> Maybe Token
-lexWord word =
-    (, word) <$> classification
+lexWords :: Text -> [Either Text Token]
+lexWords "" = []
+lexWords text =
+    case lexWord text of
+        Just (token, rest) -> Right token : (lexWords . Text.strip) rest
+        Nothing            -> [Left text]
+
+lexWord :: Lexer
+lexWord text =
+    lexBinop text <|>
+    lexInteger text
+
+lexBinop :: Lexer
+lexBinop text
+    | elem firstChar [ "+", "-", "*", "/" ] = Just ((Binop, firstChar), rest)
+    | otherwise                             = Nothing
     where
-        classification = classify word
+        (firstChar, rest) = Text.splitAt 1 text
 
-classify :: Text -> Maybe TokenType
-classify text
-    | elem text [ "+", "-", "*", "/" ]  = Just Binop
-    | all (`elem` [ '0' .. '9' ]) text  = Just Integer
-    | otherwise                         = Nothing
+lexInteger :: Lexer
+lexInteger text
+    | (not . Text.null) integer = Just ((Integer, integer), rest)
+    | otherwise                 = Nothing
+    where
+        (integer, rest) = Text.span isDigit text

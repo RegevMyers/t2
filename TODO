@@ -1,1 +1,2 @@
 - Make all top leveltransformers (lex, sem, syn, gen) support Either
+- Write tests for `lex`

@@ -6,7 +6,7 @@ module Main (
 
 import qualified Lex as Lex
 
-import Utils.Maybe
+import Utils.Either
 
 import qualified Data.Text as Text
 import qualified Data.Text.IO as Text.IO
