@@ -20,4 +20,3 @@ main = do
     where
         formatLexTokens = Text.pack . show
         formatLexError lexError = (Text.pack "Lexer encountered unlexable token: ") <> lexError
-

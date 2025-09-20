@@ -1,0 +1,21 @@
+cabal-version:      3.4
+name:               CommonSpec
+version:            0.0.0
+build-type:         Simple
+
+test-suite CommonSpec
+    type:               exitcode-stdio-1.0
+    ghc-options:        -Wall
+    main-is:            Main.hs
+    hs-source-dirs:     .
+    other-modules:      Utils.CharSpec,
+                        Utils.FunctionSpec,
+                        Utils.ListSpec,
+                        Utils.MaybeSpec
+    build-depends:      base              ^>= 4.20,
+                        hspec             ^>= 2.11,
+                        QuickCheck        ^>= 2.16,
+                        hspec-discover    ^>= 2.11,
+                        Common
+    build-tool-depends: hspec-discover:hspec-discover ^>= 2.11
+    default-language:   Haskell2010

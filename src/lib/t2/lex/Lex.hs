@@ -3,8 +3,7 @@
 
 module Lex (
     lex,
-    lexTokens,
-    lexToken
+    TokenType(..)
 ) where
 
 import Internal.Lexer

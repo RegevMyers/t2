@@ -1,0 +1,19 @@
+cabal-version:      3.4
+name:               LexSpec
+version:            0.0.0
+build-type:         Simple
+
+test-suite LexSpec
+    type:               exitcode-stdio-1.0
+    ghc-options:        -Wall
+    main-is:            Main.hs
+    other-modules:      LexSpec
+    hs-source-dirs:     .
+    build-depends:      base              ^>= 4.20,
+                        hspec             ^>= 2.11,
+                        QuickCheck        ^>= 2.16,
+                        hspec-discover    ^>= 2.11,
+                        text              ^>= 2.1,
+                        Lex
+    build-tool-depends: hspec-discover:hspec-discover ^>= 2.11
+    default-language:   Haskell2010

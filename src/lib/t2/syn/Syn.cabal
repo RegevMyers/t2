@@ -1,14 +1,12 @@
 cabal-version:  3.4
-name:           Main
+name:           Syn
 version:        0.0.0
 build-type:     Simple
 
-executable t2
+library
     ghc-options:        -Wall
     hs-source-dirs:     .
-    main-is:            Main.hs
+    exposed-modules:    Syn.hs
     build-depends:      base ^>= 4.20,
                         text ^>= 2.1,
-                        Lex,
-                        Common
     default-language:   Haskell2010
