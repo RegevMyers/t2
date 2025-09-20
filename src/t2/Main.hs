@@ -14,5 +14,10 @@ import qualified Data.Text.IO as Text.IO
 main :: IO ()
 main = do
     content <- Text.IO.readFile "examples/math.t2"
-    let lex' = Lex.lex content ?? []
-    Text.IO.putStrLn $ Text.pack $ show lex'
+    let tokens = Lex.lex content
+        formattedOutput = either formatLexError formatLexTokens tokens
+    Text.IO.putStrLn $ formattedOutput
+    where
+        formatLexTokens = Text.pack . show
+        formatLexError lexError = (Text.pack "Lexer encountered unlexable token: ") <> lexError
+
