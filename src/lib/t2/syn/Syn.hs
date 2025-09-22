@@ -1,13 +1,17 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TupleSections #-}
 
-module Syn (
-    syn,
-    TokenType(..)
-) where
+module Syn
+--(
+--    syn
+--)
+where
 
-import Lex (lex)
+import Internal.Ast as Ast (Expression(..))
 
-import Prelude hiding (lex)
+import Lex (Token(..))
 
-syn :: [Token] -> Ast
+import Internal.Parsers
+import Internal.Parser
+
+syn :: [Token] -> Expression
+syn = undefined

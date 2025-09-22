@@ -3,7 +3,7 @@
 
 module Lex (
     lex,
-    TokenType(..)
+    Token(..),
 ) where
 
 import Internal.Lexer
@@ -32,14 +32,14 @@ lexToken text =
 
 lexBinop :: Lexer
 lexBinop text
-    | elem firstChar [ "+", "-", "*", "/" ] = Just ((Binop, firstChar), rest)
+    | elem firstChar [ "+", "-", "*", "/" ] = Just (Binop firstChar, rest)
     | otherwise                             = Nothing
     where
         (firstChar, rest) = Text.splitAt 1 text
 
 lexInteger :: Lexer
 lexInteger text
-    | (not . Text.null) integer = Just ((Integer, integer), rest)
+    | (not . Text.null) integer = Just (Integer integer, rest)
     | otherwise                 = Nothing
     where
         (integer, rest) = Text.span isDigit text

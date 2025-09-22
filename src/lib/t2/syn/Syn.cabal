@@ -6,7 +6,13 @@ build-type:     Simple
 library
     ghc-options:        -Wall
     hs-source-dirs:     .
-    exposed-modules:    Syn.hs
+    exposed-modules:    Syn
+    other-modules:      Internal.Ast,
+                        Internal.Parser,
+                        Internal.Parsers,
+                        Internal.Guards
     build-depends:      base ^>= 4.20,
                         text ^>= 2.1,
+                        Common,
+                        Lex
     default-language:   Haskell2010
