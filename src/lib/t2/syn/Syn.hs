@@ -1,17 +1,19 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Syn
---(
---    syn
---)
-where
+module Syn (
+    syn
+) where
 
 import Internal.Ast as Ast (Expression(..))
-
-import Lex (Token(..))
-
 import Internal.Parsers
-import Internal.Parser
+import Internal.Parser as Parser (Parser(run))
 
-syn :: [Token] -> Expression
-syn = undefined
+import Lex (Token)
+
+import Data.Text (Text)
+
+syn :: [Token] -> Either Text Expression
+syn tokens =
+    case Parser.run parseExpression tokens of
+        Just (expression, _) -> Right expression
+        Nothing -> Left $ "sad... :("

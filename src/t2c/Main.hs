@@ -4,7 +4,10 @@ module Main (
     main
 ) where
 
-import qualified Lex as Lex
+import Prelude hiding (lex)
+
+import qualified Lex as Lex (lex)
+import qualified Syn as Syn (syn)
 
 import Utils.Either
 

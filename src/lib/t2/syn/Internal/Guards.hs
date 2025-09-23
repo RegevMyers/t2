@@ -1,6 +1,7 @@
 
 module Internal.Guards (
-    guardNotEmpty
+    guardNotEmpty,
+    guardCount
 ) where
 
 --import Internal.Ast as Ast (Expression(..), BinopType(..))
@@ -13,6 +14,8 @@ type Guard = Parser ()
 guardNotEmpty :: Guard
 guardNotEmpty = guard (not . null)
 
+guardCount :: (Int -> Bool) -> Guard
+guardCount p = guard (p . length)
+
 guard :: ([Token] -> Bool) -> Guard
-guard p = Parser $ \tokens ->
-    if p tokens then Just ((), tokens) else Nothing
+guard p = Parser $ \tokens -> if p tokens then Just ((), tokens) else Nothing

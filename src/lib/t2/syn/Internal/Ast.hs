@@ -4,7 +4,7 @@ module Internal.Ast (
 ) where
 
 data Expression =
-    Binop Expression BinopType Expression |
+    Binop BinopType Expression Expression |
     Integer Integer
     deriving(Show)
 

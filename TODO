@@ -1,3 +1,4 @@
+- add guard to all parsers
 - make Lexer derive Functor, Applicative, Alternative, Monad
 - Make all top leveltransformers (lex, sem, syn, gen) support Either
 - Write tests for `lex`

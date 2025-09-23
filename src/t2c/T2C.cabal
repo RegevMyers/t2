@@ -9,6 +9,7 @@ executable t2c
     main-is:            Main.hs
     build-depends:      base ^>= 4.20,
                         text ^>= 2.1,
+                        Common,
                         Lex,
-                        Common
+                        Syn
     default-language:   Haskell2010
