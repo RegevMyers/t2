@@ -16,3 +16,6 @@ library
                         Common,
                         Lex
     default-language:   Haskell2010
+    default-extensions: OverloadedStrings,
+                        TupleSections,
+                        LambdaCase

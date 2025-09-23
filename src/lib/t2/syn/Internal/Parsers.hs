@@ -10,7 +10,7 @@ import Internal.Guards
 
 import Lex (Token(..))
 
-import Data.Text as Text (unpack)
+import Data.Text as Text (Text, unpack)
 import Control.Applicative ((<|>))
 
 parseExpression :: Parser Expression
@@ -30,7 +30,9 @@ parseTerm = do
     parseInteger
 
 parseInteger :: Parser Expression
-parseInteger = Parser $ parse
+parseInteger = do
+    guardNotEmpty
+    Parser $ parse
     where
         parse (Lex.Integer integerAsText : rest) =
             Just (Ast.Integer $ readInteger integerAsText, rest)
@@ -39,10 +41,16 @@ parseInteger = Parser $ parse
         parse _ = Nothing
 
 parseBinop :: Parser BinopType
-parseBinop = Parser $ parse
-    where
-        parse (Lex.Binop "+" : rest) = Just (Ast.Plus, rest)
-        parse (Lex.Binop "-" : rest) = Just (Ast.Minus, rest)
-        parse (Lex.Binop "*" : rest) = Just (Ast.Times, rest)
-        parse (Lex.Binop "/" : rest) = Just (Ast.Divide, rest)
-        parse _                      = Nothing
+parseBinop = do
+    guardNotEmpty
+    Parser $ \case
+        (Lex.Binop op : rest) -> (, rest) <$> lookup op opTable
+        _                     -> Nothing
+
+opTable :: [(Text, Ast.BinopType)]
+opTable = [
+        ("+", Ast.Plus),
+        ("-", Ast.Minus),
+        ("*", Ast.Times),
+        ("/", Ast.Divide)
+    ]

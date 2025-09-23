@@ -14,7 +14,7 @@ instance Functor (Parser) where
         return (f a, rest)
 
 instance Applicative (Parser) where
-    pure a = Parser $ \tokens-> Just (a, tokens)
+    pure a = Parser $ \tokens -> Just (a, tokens)
     (Parser pf) <*> (Parser pa) = Parser $ \tokens -> do
         (f, tokens') <- pf tokens
         (a, rest)    <- pa tokens'

@@ -13,3 +13,4 @@ executable t2c
                         Lex,
                         Syn
     default-language:   Haskell2010
+    default-extensions: OverloadedStrings
