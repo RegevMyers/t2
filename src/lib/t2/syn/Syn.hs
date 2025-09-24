@@ -1,4 +1,5 @@
 module Syn (
+    Expression,
     syn
 ) where
 

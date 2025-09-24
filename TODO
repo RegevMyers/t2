@@ -1,4 +1,6 @@
-- add guard to all parsers
+- update versions
+- move `Ast.Binop_` to `Internal.Ast.Binop`
+- create `Lexers.hs` and make `Lex.hs` contain `lex` only
 - make Lexer derive Functor, Applicative, Alternative, Monad
 - Make all top leveltransformers (lex, sem, syn, gen) support Either
 - Write tests for `lex`

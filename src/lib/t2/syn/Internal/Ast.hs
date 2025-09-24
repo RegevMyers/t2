@@ -1,16 +1,16 @@
 module Internal.Ast (
     Expression(..),
-    BinopType(..)
+    BinopType(..),
+    BinopAssociativity(..),
+    Binop(..)
 ) where
 
 data Expression =
-    Binop BinopType Expression Expression |
+    Binexpr Binop Expression Expression |
     Integer Integer
     deriving(Show)
 
-data BinopType =
-    Plus |
-    Minus |
-    Times |
-    Divide
-    deriving(Show)
+data BinopType = Plus | Minus | Times | Divide deriving(Show)
+type BinopPower = Int
+data BinopAssociativity = LeftAssociative | RightAssociative | Unassociative deriving(Show)
+data Binop = Binop BinopType BinopPower BinopAssociativity deriving(Show)

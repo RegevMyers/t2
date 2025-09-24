@@ -6,18 +6,18 @@ import Prelude hiding (lex)
 
 import qualified Lex as Lex (lex)
 import qualified Syn as Syn (syn)
+import qualified Syn as Ast (Expression)
 
-import Utils.Either
-
-import qualified Data.Text as Text
+import Data.Text
 import qualified Data.Text.IO as Text.IO
+import Control.Monad ((>=>))
+import Data.Either (fromRight)
 
 main :: IO ()
 main = do
     content <- Text.IO.readFile "examples/math.t2"
-    let tokens = Lex.lex content
-        formattedOutput = either formatLexError formatLexTokens tokens
-    Text.IO.putStrLn $ formattedOutput
-    where
-        formatLexTokens = Text.pack . show
-        formatLexError lexError = (Text.pack "Lexer encountered unlexable token: ") <> lexError
+    let ast = compile content
+    Text.IO.putStrLn $ case ast of Right ast' -> (pack . show) ast'
+
+compile :: Text -> Either Text Ast.Expression
+compile = Lex.lex >=> Syn.syn

@@ -1,5 +1,6 @@
 
 module Internal.Guards (
+    assert,
     guardNotEmpty,
     guardCount
 ) where
@@ -10,6 +11,9 @@ import Internal.Parser (Parser(..))
 import Lex (Token)
 
 type Guard = Parser ()
+
+assert :: Bool -> Guard
+assert b = guard (\_ -> b)
 
 guardNotEmpty :: Guard
 guardNotEmpty = guard (not . null)
