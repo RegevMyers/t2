@@ -3,7 +3,8 @@ module Internal.Lexers (
     lexTokens
 ) where
 
-import Internal.Lexer
+import Internal.Lexer (Lexer, Token)
+import qualified Internal.Lexer as Tok
 
 import qualified Data.Text as Text
 import Data.Text (Text)
@@ -21,18 +22,27 @@ lexTokens text =
 lexToken :: Lexer
 lexToken text =
     lexBinop text <|>
-    lexInteger text
+    lexInteger text <|>
+    lexParen text
 
 lexBinop :: Lexer
 lexBinop text
-    | elem firstChar [ "+", "-", "*", "/" ] = Just (Binop firstChar, rest)
+    | elem firstChar [ "+", "-", "*", "/" ] = Just (Tok.Binop firstChar, rest)
     | otherwise                             = Nothing
     where
         (firstChar, rest) = Text.splitAt 1 text
 
 lexInteger :: Lexer
 lexInteger text
-    | (not . Text.null) integer = Just (Integer integer, rest)
+    | (not . Text.null) integer = Just (Tok.Integer integer, rest)
     | otherwise                 = Nothing
     where
         (integer, rest) = Text.span isDigit text
+
+lexParen :: Lexer
+lexParen text
+    | firstChar == "(" = Just (Tok.Paren Tok.Left, rest)
+    | firstChar == ")" = Just (Tok.Paren Tok.Right, rest)
+    | otherwise        = Nothing
+    where
+        (firstChar, rest) = Text.splitAt 1 text

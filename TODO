@@ -1,4 +1,5 @@
 - update versions
+- make `Expression` have a custom Show instance
 - move `Ast.Binop_` to `Internal.Ast.Binop`
 - create `Lexers.hs` and make `Lex.hs` contain `lex` only
 - make Lexer derive Functor, Applicative, Alternative, Monad

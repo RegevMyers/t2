@@ -1,9 +1,10 @@
 module Lex (
     lex,
     Token(..),
+    ParenType(..)
 ) where
 
-import Internal.Lexer (Token(..))
+import Internal.Lexer (Token(..), ParenType(..))
 import Internal.Lexers (lexTokens)
 
 import Data.Text (Text)

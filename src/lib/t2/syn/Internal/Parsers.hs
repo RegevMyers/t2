@@ -8,72 +8,85 @@ import Internal.Ast as Ast
 import Internal.Parser (Parser(..))
 import Internal.Guards
 
-import qualified Lex (Token(..))
+import Lex (Token)
+import qualified Lex as Tok (Token(..), ParenType(..))
 
 import Utils.Alternative (try)
 
 import Data.Text as Text (Text, unpack)
-import Control.Applicative ((<|>), optional)
+import Control.Applicative ((<|>))
 
-parseExpression :: Parser Ast.Expression
+parseToken :: Token -> Parser ()
+parseToken token = do
+    guardNotEmpty
+    Parser $ parse
+    where
+        parse (token':rest) = if token' == token then Just ((), rest) else Nothing
+        parse _             = Nothing
+
+parseExpression :: Parser Expression
 parseExpression = do
     guardNotEmpty
-    parseBinaryExpression 0 <|> parseInteger
+    parseBinaryExpression 0 <|> parseTerm <|> (Parser $ (\token -> error $ show $ token))
 
-parseTerm :: Parser Ast.Expression
+parseTerm :: Parser Expression
 parseTerm = do
     guardNotEmpty
-    parseInteger
+    parseInteger <|> parseParens
 
-parseInteger :: Parser Ast.Expression
+parseInteger :: Parser Expression
 parseInteger = do
     guardNotEmpty
     Parser $ parse
     where
-        parse (Lex.Integer integerAsText : rest) =
+        parse (Tok.Integer integerAsText : rest) =
             Just (Ast.Integer $ readInteger integerAsText, rest)
             where
                 readInteger text = (read . Text.unpack) text
         parse _ = Nothing
 
--- 1   +   1   *   1   +   4   +   4   +   4
---   1   1+  2   2+  1   1+  1   1+  1   1+
+parseParens :: Parser Expression
+parseParens = do
+    guardCount (>= 3)
+    parseToken (Tok.Paren Tok.Left) *> parseExpression <* parseToken (Tok.Paren Tok.Right)
 
-parseBinaryExpression :: Int -> Parser Ast.Expression
+parseBinaryExpression :: BinopPower -> Parser Expression
 parseBinaryExpression minPower = do
     guardNotEmpty
-    term <- parseTerm
-    try (addTail minPower) term
-    where
-        addTail minPower' lhs = do
-            (op@(Ast.Binop _ opPower associativity), rhs) <- parseBinaryExpressionTail minPower'
-            let binexpr = Ast.Binexpr op lhs rhs
-            case associativity of
-                LeftAssociative -> try (addTail opPower) binexpr
-                _               -> pure binexpr
+    parseTerm >>= try (addBinaryExpressionTail minPower)
 
-parseBinaryExpressionTail :: Int -> Parser (Ast.Binop, Ast.Expression)
+addBinaryExpressionTail :: BinopPower -> Expression -> Parser Expression
+addBinaryExpressionTail minPower lhs = do
+    (op@(Ast.Binop _ power associativity), rhs) <- parseBinaryExpressionTail minPower
+    let binexpr = Ast.Binexpr op lhs rhs
+    case associativity of
+        LeftAssociative -> try (addBinaryExpressionTail power) binexpr
+        _               -> pure binexpr
+
+parseBinaryExpressionTail :: BinopPower -> Parser (Binop, Expression)
 parseBinaryExpressionTail minPower = do
     guardCount (>= 2)
-    op@(Ast.Binop _ opPower associativity) <- parseBinaryOperator
-    assert $ opPower >= minPower
-    -- assert $ case associativity of
-    --     LeftAssociative  -> opPower >  minPower
-    --     RightAssociative -> opPower >= minPower
-    rhs <- parseBinaryExpression (if associativity == LeftAssociative then opPower + 1 else opPower)
-    return $ (op, rhs)
+    op@(Ast.Binop _ power associativity) <- parseBinaryOperator
+    assert $ power >= minPower
+    rhs <- parseRhs power associativity
+    return (op, rhs)
+    where
+        parseRhs power associativity = case associativity of
+            LeftAssociative  -> parseBinaryExpression $ power + 1
+            RightAssociative -> parseBinaryExpression power
+            Unassociative    -> parseTerm
 
-parseBinaryOperator :: Parser Ast.Binop
+parseBinaryOperator :: Parser Binop
 parseBinaryOperator = do
     guardNotEmpty
     Parser $ \case
-        (Lex.Binop op : rest) -> (, rest) <$> lookup op opTable
+        (Tok.Binop op : rest) -> (, rest) <$> lookup op opTable
         _                     -> Nothing
 
 opTable :: [(Text, Ast.Binop)]
 opTable = [
         ("+", Ast.Binop Plus   1 LeftAssociative),
-        ("-", Ast.Binop Minus  1 RightAssociative),
+        ("-", Ast.Binop Minus  1 LeftAssociative),
         ("*", Ast.Binop Times  2 LeftAssociative),
-        ("/", Ast.Binop Divide 2 Unassociative)
+        ("/", Ast.Binop Divide 2 LeftAssociative)
     ]

@@ -1,6 +1,7 @@
 module Internal.Ast (
     Expression(..),
     BinopType(..),
+    BinopPower,
     BinopAssociativity(..),
     Binop(..)
 ) where
