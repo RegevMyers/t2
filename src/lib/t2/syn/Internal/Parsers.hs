@@ -85,8 +85,9 @@ parseBinaryOperator = do
 
 opTable :: [(Text, Ast.Binop)]
 opTable = [
-        ("+", Ast.Binop Plus   1 LeftAssociative),
-        ("-", Ast.Binop Minus  1 LeftAssociative),
+        ("^", Ast.Binop Exp    3 RightAssociative),
         ("*", Ast.Binop Times  2 LeftAssociative),
-        ("/", Ast.Binop Divide 2 LeftAssociative)
+        ("/", Ast.Binop Divide 2 LeftAssociative),
+        ("+", Ast.Binop Plus   1 LeftAssociative),
+        ("-", Ast.Binop Minus  1 LeftAssociative)
     ]

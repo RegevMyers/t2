@@ -27,7 +27,7 @@ lexToken text =
 
 lexBinop :: Lexer
 lexBinop text
-    | elem firstChar [ "+", "-", "*", "/" ] = Just (Tok.Binop firstChar, rest)
+    | elem firstChar [ "+", "-", "*", "/", "^" ] = Just (Tok.Binop firstChar, rest)
     | otherwise                             = Nothing
     where
         (firstChar, rest) = Text.splitAt 1 text

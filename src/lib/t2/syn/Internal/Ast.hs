@@ -11,7 +11,7 @@ data Expression =
     Integer Integer
     deriving(Show)
 
-data BinopType = Plus | Minus | Times | Divide deriving(Show)
+data BinopType = Plus | Minus | Times | Divide | Exp deriving(Show)
 type BinopPower = Int
 data BinopAssociativity = LeftAssociative | RightAssociative | Unassociative deriving(Eq, Show)
 data Binop = Binop BinopType BinopPower BinopAssociativity deriving(Show)
