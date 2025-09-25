@@ -6,7 +6,8 @@ build-type:         Simple
 library
     ghc-options:        -Wall
     hs-source-dirs:     .
-    exposed-modules:    Utils.Char,
+    exposed-modules:    Utils.Alternative,
+                        Utils.Char,
                         Utils.Either,
                         Utils.Function,
                         Utils.List,

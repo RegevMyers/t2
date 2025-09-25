@@ -12,5 +12,5 @@ data Expression =
 
 data BinopType = Plus | Minus | Times | Divide deriving(Show)
 type BinopPower = Int
-data BinopAssociativity = LeftAssociative | RightAssociative | Unassociative deriving(Show)
+data BinopAssociativity = LeftAssociative | RightAssociative | Unassociative deriving(Eq, Show)
 data Binop = Binop BinopType BinopPower BinopAssociativity deriving(Show)
