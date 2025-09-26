@@ -13,17 +13,20 @@ import Data.Char (isDigit)
 import Control.Applicative ((<|>))
 
 lexTokens :: Text -> [Either Text Token]
-lexTokens "" = []
+lexTokens "" = [Right Tok.Eof]
 lexTokens text =
     case lexToken text of
-        Just (token, rest) -> Right token : (lexTokens . Text.stripStart) rest
+        Just (token, rest) -> Right token : (lexTokens . stripSpace) rest
         Nothing            -> [Left text]
+    where
+        stripSpace = Text.dropWhile (==' ')
 
 lexToken :: Lexer
 lexToken text =
     lexBinop text <|>
     lexInteger text <|>
-    lexParen text
+    lexParen text <|>
+    lexNewline text
 
 lexBinop :: Lexer
 lexBinop text
@@ -46,3 +49,10 @@ lexParen text
     | otherwise        = Nothing
     where
         (firstChar, rest) = Text.splitAt 1 text
+
+lexNewline :: Lexer
+lexNewline text
+    | (not . Text.null) nls = Just (Tok.Newline, rest)
+    | otherwise             = Nothing
+    where
+        (nls, rest) = Text.span (=='\n') text

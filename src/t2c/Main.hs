@@ -20,5 +20,5 @@ main = do
     let ast = compile content
     Text.IO.putStrLn $ case ast of Right ast' -> (pack . show) ast'
 
-compile :: Text -> Either Text Ast.Expression
+compile :: Text -> Either Text [Ast.Expression]
 compile = Lex.lex >=> Syn.syn

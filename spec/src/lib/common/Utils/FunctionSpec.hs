@@ -2,9 +2,8 @@
 
 module Utils.FunctionSpec (spec) where
 
-import Test.Hspec (Spec, describe, it, shouldBe)
-import Test.Hspec.QuickCheck (prop)
-import Test.QuickCheck ((==>))
+import Test.Hspec
+import Test.Hspec.QuickCheck
 
 import Utils.Function (pipe, (|>>), (<<|))
 

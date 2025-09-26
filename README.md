@@ -1,3 +1,3 @@
 # t2
 
-run with `cabal run t2c`
+run with `cabal run t2c <filename>`

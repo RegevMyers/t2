@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Internal.Parsers (
-    parseExpression
+    parseExpressions
 ) where
 
 import Internal.Ast as Ast
@@ -16,18 +16,21 @@ import Utils.Alternative (try)
 import Data.Text as Text (Text, unpack)
 import Control.Applicative ((<|>))
 
-parseToken :: Token -> Parser ()
-parseToken token = do
-    guardNotEmpty
-    Parser $ parse
+parseExpressions :: Parser [Expression]
+parseExpressions = Parser $ parse
     where
-        parse (token':rest) = if token' == token then Just ((), rest) else Nothing
-        parse _             = Nothing
+        parse [] = Just ([], [])
+        parse tokens = run (parseExpression <&> (:) <*> parseExpressions) tokens
+            where
+                (<&>) = flip (<$>)
 
 parseExpression :: Parser Expression
 parseExpression = do
     guardNotEmpty
-    parseBinaryExpression 0 <|> parseTerm <|> (Parser $ (\token -> error $ show $ token))
+    (parseBinaryExpression 0 <|> parseTerm) <* parseExpressionEnd
+
+parseExpressionEnd :: Parser ()
+parseExpressionEnd = parseToken Tok.Newline <|> parseToken Tok.Eof
 
 parseTerm :: Parser Expression
 parseTerm = do
@@ -67,7 +70,7 @@ parseBinaryExpressionTail :: BinopPower -> Parser (Binop, Expression)
 parseBinaryExpressionTail minPower = do
     guardCount (>= 2)
     op@(Ast.Binop _ power associativity) <- parseBinaryOperator
-    assert $ power >= minPower
+    guard $ power >= minPower
     rhs <- parseRhs power associativity
     return (op, rhs)
     where
@@ -91,3 +94,11 @@ opTable = [
         ("+", Ast.Binop Plus   1 LeftAssociative),
         ("-", Ast.Binop Minus  1 LeftAssociative)
     ]
+
+parseToken :: Token -> Parser ()
+parseToken token = do
+    guardNotEmpty
+    Parser $ parse
+    where
+        parse (token':rest) = if token' == token then Just ((), rest) else Nothing
+        parse _             = Nothing

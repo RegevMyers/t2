@@ -9,7 +9,9 @@ import Data.Text (Text)
 data Token =
     Integer Text |
     Binop Text |
-    Paren ParenType
+    Paren ParenType |
+    Newline |
+    Eof
     deriving(Eq, Show)
 
 data ParenType = Left | Right deriving(Eq, Show)

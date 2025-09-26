@@ -8,3 +8,4 @@ packages:
 
     spec/src/lib/common/
     spec/src/lib/t2/lex
+    spec/src/lib/t2/syn

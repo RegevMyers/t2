@@ -8,7 +8,9 @@ test-suite CommonSpec
     ghc-options:        -Wall
     main-is:            Main.hs
     hs-source-dirs:     .
-    other-modules:      Utils.CharSpec,
+    other-modules:      Utils.AlternativeSpec,
+                        Utils.CharSpec,
+                        Utils.EitherSpec,
                         Utils.FunctionSpec,
                         Utils.ListSpec,
                         Utils.MaybeSpec
@@ -19,3 +21,4 @@ test-suite CommonSpec
                         Common
     build-tool-depends: hspec-discover:hspec-discover ^>= 2.11
     default-language:   Haskell2010
+    default-extensions: ScopedTypeVariables

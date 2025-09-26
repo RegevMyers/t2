@@ -1,8 +1,9 @@
 
 module Internal.Guards (
-    assert,
+    guard,
     guardNotEmpty,
-    guardCount
+    guardCount,
+    guardNoMoreTokens
 ) where
 
 --import Internal.Ast as Ast (Expression(..), BinopType(..))
@@ -12,14 +13,17 @@ import Lex (Token)
 
 type Guard = Parser ()
 
-assert :: Bool -> Guard
-assert b = guard (\_ -> b)
+guard :: Bool -> Guard
+guard b = guardTokens (\_ -> b)
 
 guardNotEmpty :: Guard
-guardNotEmpty = guard (not . null)
+guardNotEmpty = guardTokens (not . null)
 
 guardCount :: (Int -> Bool) -> Guard
-guardCount p = guard (p . length)
+guardCount p = guardTokens (p . length)
 
-guard :: ([Token] -> Bool) -> Guard
-guard p = Parser $ \tokens -> if p tokens then Just ((), tokens) else Nothing
+guardNoMoreTokens :: Guard
+guardNoMoreTokens = guardTokens null
+
+guardTokens :: ([Token] -> Bool) -> Guard
+guardTokens p = Parser $ \tokens -> if p tokens then Just ((), tokens) else Nothing
