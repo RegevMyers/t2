@@ -20,14 +20,19 @@ parseExpressions :: Parser [Expression]
 parseExpressions = Parser $ parse
     where
         parse [] = Just ([], [])
-        parse tokens = run (parseExpression <&> (:) <*> parseExpressions) tokens
+        parse tokens = run (parseFullExpression <&> (:) <*> parseExpressions) tokens
             where
                 (<&>) = flip (<$>)
+
+parseFullExpression :: Parser Expression
+parseFullExpression = do
+    guardNotEmpty
+    parseExpression <* parseExpressionEnd
 
 parseExpression :: Parser Expression
 parseExpression = do
     guardNotEmpty
-    (parseBinaryExpression 0 <|> parseTerm) <* parseExpressionEnd
+    (parseBinaryExpression 0 <|> parseTerm)
 
 parseExpressionEnd :: Parser ()
 parseExpressionEnd = parseToken Tok.Newline <|> parseToken Tok.Eof
@@ -88,11 +93,11 @@ parseBinaryOperator = do
 
 opTable :: [(Text, Ast.Binop)]
 opTable = [
-        ("^", Ast.Binop Exp    3 RightAssociative),
+        ("+", Ast.Binop Plus   1 LeftAssociative),
+        ("-", Ast.Binop Minus  1 LeftAssociative),
         ("*", Ast.Binop Times  2 LeftAssociative),
         ("/", Ast.Binop Divide 2 LeftAssociative),
-        ("+", Ast.Binop Plus   1 LeftAssociative),
-        ("-", Ast.Binop Minus  1 LeftAssociative)
+        ("^", Ast.Binop Exp    3 RightAssociative)
     ]
 
 parseToken :: Token -> Parser ()

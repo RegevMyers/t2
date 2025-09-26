@@ -33,3 +33,11 @@ spec = describe "Spec" $ do
                                 (Ast.Integer 2)
                                 (Ast.Integer 3))
                     ]
+            it "respects parens" $ do
+                (lex >=> syn) "1 * (2 * 3)" `shouldBe` Right [
+                        Ast.Binexpr (Ast.Binop Times 2 LeftAssociative)
+                            (Ast.Integer 1)
+                            (Ast.Binexpr (Ast.Binop Times 2 LeftAssociative)
+                                (Ast.Integer 2)
+                                (Ast.Integer 3))
+                    ]
