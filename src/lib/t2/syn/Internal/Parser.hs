@@ -2,11 +2,11 @@ module Internal.Parser (
     Parser(..)
 ) where
 
-import Lex (Token)
+import qualified Lex (Token)
 
 import Control.Applicative (Alternative(..))
 
-data Parser a = Parser { run :: [Token] -> Maybe (a, [Token])}
+data Parser a = Parser { runParser :: [Lex.Token] -> Maybe (a, [Lex.Token])}
 
 instance Functor (Parser) where
     fmap f (Parser pa) = Parser $ \tokens -> do

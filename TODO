@@ -1,5 +1,8 @@
 - update versions
-- include typecalss members as `(Class(func))`
+- add CI
+- make `Transformer` type/typeclass for `Lexer`/`Parser`/`Generator` as they all have the signature `Transformer s t = Transformer { run :: s -> Maybe (t, s) }`
+- import typecalss members as `(Class(func))`
+- make Regisater a typeclass with lowercase show called showRegister or smt
 - make `Expression` have a custom Show instance
 - move `Ast.Binop_` to `Internal.Ast.Binop`
 - create `Lexers.hs` and make `Lex.hs` contain `lex` only

@@ -20,7 +20,7 @@ parseExpressions :: Parser [Expression]
 parseExpressions = Parser $ parse
     where
         parse [] = Just ([], [])
-        parse tokens = run (parseFullExpression <&> (:) <*> parseExpressions) tokens
+        parse tokens = runParser (parseFullExpression <&> (:) <*> parseExpressions) tokens
             where
                 (<&>) = flip (<$>)
 

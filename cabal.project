@@ -5,6 +5,7 @@ packages:
     src/lib/common
     src/lib/t2/lex
     src/lib/t2/syn
+    src/lib/t2/gen
 
     spec/src/lib/common/
     spec/src/lib/t2/lex
