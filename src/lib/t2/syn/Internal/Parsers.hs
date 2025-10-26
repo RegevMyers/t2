@@ -12,6 +12,7 @@ import Lex (Token)
 import qualified Lex as Tok (Token(..), ParenType(..))
 
 import Utils.Alternative (try)
+import Utils.Function ((<&>))
 
 import Data.Text as Text (Text, unpack)
 import Control.Applicative ((<|>))
@@ -21,8 +22,6 @@ parseExpressions = Parser $ parse
     where
         parse [] = Just ([], [])
         parse tokens = runParser (parseFullExpression <&> (:) <*> parseExpressions) tokens
-            where
-                (<&>) = flip (<$>)
 
 parseFullExpression :: Parser Expression
 parseFullExpression = do

@@ -1,7 +1,8 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 module Utils.List (
-    (!?)
+    (!?),
+    mapInit
 ) where
 
 import qualified Safe (atMay)
@@ -15,3 +16,8 @@ instance IndexLike Int where
 
 instance IndexLike (Maybe Int) where
     list !? maybeIndex = maybeIndex >>= (list !?)
+
+mapInit :: (a -> a) -> [a] -> [a]
+mapInit _ [] = []
+mapInit _ (x:[]) = [x]
+mapInit f xs = map f (init xs) ++ [last xs]

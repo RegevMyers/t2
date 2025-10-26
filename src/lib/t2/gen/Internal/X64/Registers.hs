@@ -1,12 +1,13 @@
-module Internal.Register (
+module Internal.X64.Registers (
     Register(..),
+    Scratchpad,
     scratchRegisters
 ) where
 
+import Data.Map as Map (Map, fromList)
+
+import Data.Data (Data, toConstr)
 import Data.Char (toLower)
-import Data.Data (Data(toConstr))
-import Data.Map (Map)
-import Data.Map as Map (fromList)
 
 data Register =
     RAX | RBX | RCX | RDX |

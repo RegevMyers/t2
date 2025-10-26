@@ -7,10 +7,9 @@ library
     ghc-options:        -Wall
     hs-source-dirs:     .
     exposed-modules:    Gen
-    other-modules:      Internal.Generator,
-                        Internal.Register,
-                        Internal.X86_64.Generator,
-                        Internal.X86_64.Registers
+    other-modules:      Internal.X64.Format,
+                        Internal.X64.Generator,
+                        Internal.X64.Registers
     build-depends:      base ^>= 4.20,
                         text ^>= 2.1,
                         containers ^>= 0.7,

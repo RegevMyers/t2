@@ -1,6 +1,8 @@
 - update versions
-- add CI
 - make `Transformer` type/typeclass for `Lexer`/`Parser`/`Generator` as they all have the signature `Transformer s t = Transformer { run :: s -> Maybe (t, s) }`
+- add CI
+- Make Syn return one expression of a new ctor called Program/Ast and it will have a list of expressions as values
+- Import in order: Imports, Internals, Utils, Externals
 - import typecalss members as `(Class(func))`
 - make Regisater a typeclass with lowercase show called showRegister or smt
 - make `Expression` have a custom Show instance

@@ -1,3 +1,3 @@
 # Design
 
-(text) -> **lex** -> (tokens) -> **syn** -> (ast) -> **sem** -> (?) -> **gen** -> (asm)
+(text) -> **lex** -> (tokens) -> **syn** -> (ast) -> **sem** -> (?) -> **gen** -> (asm) **asm** -> (bin)
