@@ -11,6 +11,7 @@ executable t2c
                         text ^>= 2.1,
                         Common,
                         Lex,
-                        Syn
+                        Syn,
+                        Gen
     default-language:   Haskell2010
     default-extensions: OverloadedStrings

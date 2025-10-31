@@ -30,14 +30,16 @@ genBinexpr :: ExpressionGenerator
 genBinexpr (Ast.Binexpr binop exprA exprB) = do
     (exprAText, exprAResult) <- genExpression exprA
     (exprBText, exprBResult) <- genExpression exprB
-    binopText <- genBinop binop exprAResult exprBResult
-    freeScratchRegister exprBResult
-    return (mconcat [exprAText, exprBText, binopText], exprAResult)
+    (binopText, binopResult) <- genBinop binop exprAResult exprBResult
+    if binopResult /= exprAResult then freeScratchRegister exprAResult else pure ()
+    if binopResult /= exprBResult then freeScratchRegister exprBResult else pure ()
+    return (mconcat [exprAText, exprBText, binopText], binopResult)
 genBinexpr _ = lift Nothing
 
-genBinop :: Ast.Binop -> Register -> Register -> Generator Text
-genBinop (Ast.Binop binopType _ _) = do
-    lookup binopType binopTable ?? pure "a"
+genBinop :: Ast.Binop -> Register -> Register -> Generator (Text, Register)
+genBinop (Ast.Binop binopType _ _) regA regB = do
+    binop <- lift $ lookup binopType binopTable
+    binop regA regB
     where
         binopTable = [
                 (Ast.Plus,   genAdd),
@@ -46,34 +48,30 @@ genBinop (Ast.Binop binopType _ _) = do
                 (Ast.Divide, genDiv)
             ] --TODO support Exp
 
-genAdd :: Register -> Register -> Generator Text
+genAdd :: Register -> Register -> Generator (Text, Register)
 genAdd regA regB = do
-    freeScratchRegister regB
-    return (Fmt.instruction "add" [(pack . show) regA, (pack . show) regB])
+    return (Fmt.instruction "add" [(pack . show) regA, (pack . show) regB], regA)
 
-genSub :: Register -> Register -> Generator Text
+genSub :: Register -> Register -> Generator (Text, Register)
 genSub regA regB = do
-    freeScratchRegister regB
-    return (Fmt.instruction "sub" [(pack . show) regA, (pack . show) regB])
+    return (Fmt.instruction "sub" [(pack . show) regA, (pack . show) regB], regA)
 
-genMul :: Register -> Register -> Generator Text
+genMul :: Register -> Register -> Generator (Text, Register)
 genMul regA regB = do
-    freeScratchRegister regA
-    freeScratchRegister regB
     return (
             Fmt.instruction "mov" ["rax", (pack . show) regA] <>
             Fmt.instruction "mul" [(pack . show) regB] <>
-            Fmt.instruction "mov" [(pack . show) regA, "rax"]
+            Fmt.instruction "mov" [(pack . show) regA, "rax"],
+            regA
         ) -- TODO: return RDX too?
 
-genDiv :: Register -> Register -> Generator Text
+genDiv :: Register -> Register -> Generator (Text, Register)
 genDiv regA regB = do
-    freeScratchRegister regA
-    freeScratchRegister regB
     return (
             Fmt.instruction "mov" ["rax", (pack . show) regA] <>
             Fmt.instruction "div" [(pack . show) regB] <>
-            Fmt.instruction "mov" [(pack . show) regA, "rax"]
+            Fmt.instruction "mov" [(pack . show) regA, "rax"],
+            regA
         ) -- TODO: return RDX too?
 
 --genExp ??

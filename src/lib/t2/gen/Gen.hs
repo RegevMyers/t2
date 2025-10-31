@@ -13,10 +13,14 @@ data Arch =
     X64
     deriving(Eq)
 
-gen :: Arch -> [Ast.Expression] -> Maybe Text
-gen arch expressions = do
-    generator <- lookup arch genTable
-    generator expressions
+gen :: Arch -> [Ast.Expression] -> Either Text Text
+gen arch expressions =
+    case do
+        generator <- lookup arch genTable
+        generator expressions
+    of
+        Just text -> Right text
+        Nothing   -> Left "i cooka da pizza"
 
 genTable :: [(Arch, [Ast.Expression] -> Maybe Text)]
 genTable = [
