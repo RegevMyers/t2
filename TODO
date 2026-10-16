@@ -1,4 +1,5 @@
 - update versions
+- LOGGING
 - make genBinop non-stackky
 - make `Transformer` type/typeclass for `Lexer`/`Parser`/`Generator` as they all have the signature `Transformer s t = Transformer { run :: s -> Maybe (t, s) }`
 - add CI

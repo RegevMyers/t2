@@ -18,8 +18,10 @@ main :: IO ()
 main = do
     args <- Env.getArgs
     content <- Text.IO.readFile $ args !! 0
-    let text = compile content
-    Text.IO.putStrLn $ case text of Right text' -> text'
+    let output = compile content
+    Text.IO.putStrLn $ case output of
+        Right text -> text
+        Left error -> error
 
 compile :: Text -> Either Text Text
 compile = Lex.lex >=> Syn.syn >=> Gen.gen Gen.X64

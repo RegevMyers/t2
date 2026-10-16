@@ -19,5 +19,5 @@ syn :: [Token] -> Either Text [Expression]
 syn tokens =
     case runParser parseExpressions tokens of
         Just (expressions, []) -> Right expressions
-        Just (_, rest)         -> Left $ (pack . show) rest
+        Just (_, rest)         -> Left $ "Did not parse: " <> (pack . show) rest
         _                      -> Left "oopsie woopsie... :("

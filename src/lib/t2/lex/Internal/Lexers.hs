@@ -19,7 +19,7 @@ lexTokens text =
         Just (token, rest) -> Right token : (lexTokens . stripSpace) rest
         Nothing            -> [Left text]
     where
-        stripSpace = Text.dropWhile (==' ')
+        stripSpace = Text.dropWhile (flip elem [' ', '\r', '\n', '\t', '\v'])
 
 lexToken :: Lexer
 lexToken text =
